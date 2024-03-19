@@ -1,3 +1,5 @@
+import { auth } from "../../firebase.config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { Button, StyleSheet, TextInput, View, Alert } from "react-native";
 
@@ -10,7 +12,11 @@ export default function Cadastro({ navigation }) {
       Alert.alert("Atenção!", "Preencha e-mail e senha!");
       return;
     }
-    // Lógica para o cadastro com os dados email e senha
+    try {
+      await createUserWithEmailAndPassword(auth, email, senha);
+    } catch (error) {
+      console.error(erro.code);
+    }
   };
 
   return (
