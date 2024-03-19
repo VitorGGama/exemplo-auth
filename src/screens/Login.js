@@ -1,14 +1,14 @@
 import { Alert, Button, StyleSheet, TextInput, View } from "react-native";
 
 //Importando os recursos de autenticação
-import { Auth } from "../../firebase.config";
+import { Auth, auth } from "../../firebase.config";
 
 //Importando a função de login com e-mail e senha
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { useState } from "react";
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
@@ -17,8 +17,25 @@ export default function Login() {
       Alert.alert("Atenção!", "Preencha e-mail e senha");
       return;
     }
-
-    console.log(email, senha);
+    try {
+      await signInWithEmailAndPassword(auth, email, senha);
+      navigation.replace("AreaLogada");
+    } catch (error) {
+      console.error(error.code);
+      let mensagem;
+      switch (Error.code) {
+        case "auth/invalid-credential":
+          mensagem = "Dados inválidos!";
+          break;
+        case "auth/invalid-email":
+          mensagem = "Endereço do E-mail inválido!";
+          break;
+        default:
+          mensagem = "Houve um erro, tente mais tarde!";
+          break;
+      }
+      Alert.alert("Ops!", mensagem);
+    }
   };
   return (
     <View style={estilos.container}>
