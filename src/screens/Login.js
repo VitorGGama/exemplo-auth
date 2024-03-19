@@ -4,7 +4,10 @@ import { Alert, Button, StyleSheet, TextInput, View } from "react-native";
 import { Auth, auth } from "../../firebase.config";
 
 //Importando a função de login com e-mail e senha
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 import { useState } from "react";
 
@@ -37,6 +40,15 @@ export default function Login({ navigation }) {
       Alert.alert("Ops!", mensagem);
     }
   };
+
+  const recuperarSenha = async () => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert("Recuperar senha", "Verifique a sua caixa de e-mails.");
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={estilos.container}>
       <View style={estilos.formulario}>
@@ -53,6 +65,11 @@ export default function Login({ navigation }) {
         />
         <View style={estilos.botoes}>
           <Button onPress={login} title="Entre" color="green" />
+          <Button
+            title="Recuperar senha"
+            color="grey"
+            onPress={recuperarSenha}
+          />
         </View>
       </View>
     </View>
