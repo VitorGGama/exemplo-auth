@@ -26,7 +26,7 @@ export default function Login({ navigation }) {
     } catch (error) {
       console.error(error.code);
       let mensagem;
-      switch (Error.code) {
+      switch (error.code) {
         case "auth/invalid-credential":
           mensagem = "Dados inválidos!";
           break;
